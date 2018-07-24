@@ -4,14 +4,14 @@ const cors = require('cors')
 const morgan = require('morgan')
 const app = express()
 
-app.use(morgan('combine'))
+app.use(morgan('combined'))
 app.use(bodyParser.json())
 app.use(cors())
 
-app.get('/status', (req, res) => {
+app.post('/register', (req, res) => {
   res.send({
-    message: 'Hello World!'
+    message: `Hello: ${req.body.email} Your user was registered! have fun.`
   })
 })
 
-app.listen(process.env.PORT || 8081)
+app.listen(process.env.PORT || 8082)
