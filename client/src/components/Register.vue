@@ -1,16 +1,32 @@
 <template>
-  <div>
-    <h1>Register</h1>
+  <v-layout class="register-layout">
+    <v-flex xs4 offset-xs4>
+      <div class="white elevation-2">
+        <v-toolbar flat dense class="primary" dark>
+          <v-toolbar-title class="white--text w-100 text-center">Register</v-toolbar-title>
+        </v-toolbar>
 
-    <input type='email' v-model="email" name='email' placeholder='email' />
+        <div class="pl-4 pr-4 pt-2 pb-3">
+          <form name="tab-tracker-form" autocomplete="off">
+            <v-flex xs12 md12 class="mx-auto">
+              <v-text-field name='email' v-model='email' type='email' placeholder="Email"></v-text-field>
+            </v-flex>
 
-    <input type='password' v-model="password" name='email' placeholder='password' />
+            <br>
+            <v-flex xs12 md12 class="mx-auto">
+              <v-text-field name='password' v-model='password' type='password' placeholder="Password"></v-text-field>
+            </v-flex>
+          </form>
+          <br>
 
-    <br>
+          <div class="error" v-html='error' />
 
-    <button @click="register">Register</button>
-
-  </div>
+          <br>
+          <v-btn dark @click="register" color="primary" class="mx-auto d-block">Register</v-btn>
+        </div>
+      </div>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
@@ -19,15 +35,24 @@
     data() {
       return {
         email: '',
-        password: ''
+        password: '',
+        error: null
       }
     },
     methods: {
       async register() {
-        await AuthenticationService.register({
-          email: this.email,
-          password: this.password
-        });
+        try {
+          this.error = ""
+          const response = await AuthenticationService.register({
+            email: this.email,
+            password: this.password
+          });
+          
+          this.$store.dispatch('setToken', response.data.token)
+          this.$store.dispatch('setUser', response.data.user)
+        } catch (err) {
+          this.error = err.response.data.error
+        }
       }
     }
   }
@@ -35,22 +60,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  h1,
-  h2 {
-    font-weight: normal;
-  }
-
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-
-  li {
-    display: inline-block;
-    margin: 0 10px;
-  }
-
-  a {
-    color: #42b983;
+  .register-layout {
+    margin-top: 120px;
   }
 </style>
