@@ -6,11 +6,11 @@
         </router-link>
     </v-toolbar-title>
 
-    <!-- <v-toolbar-items>
-      <v-btn flat dark>
-          Browse
+    <v-toolbar-items>
+      <v-btn router to='/songs' flat dark class="transfom-none">
+        Browse
       </v-btn>
-    </v-toolbar-items> -->
+    </v-toolbar-items>
 
     <v-spacer></v-spacer>
 
@@ -25,8 +25,8 @@
     </v-toolbar-items>
 
     <v-toolbar-items v-if="$store.state.isUserLoggedIn">
-      <v-btn router to='/register' flat dark class="transfom-none">
-        Logout
+      <v-btn @click="logout" flat dark class="transfom-none">
+        Log Out
       </v-btn>
     </v-toolbar-items>
 
@@ -35,7 +35,15 @@
 
 <script>
   export default {
-
+    methods: {
+      logout() {
+        this.$store.dispatch('setToken', null)
+        this.$store.dispatch('setUser', null)
+        this.$router.push({
+          name: 'root'
+        })
+      }
+    }
   }
 </script>
 
