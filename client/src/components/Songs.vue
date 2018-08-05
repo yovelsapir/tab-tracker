@@ -69,7 +69,6 @@
 
   .song-artist {
     font-size: 24px;
-
   }
 
   .song-album {
